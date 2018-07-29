@@ -8,15 +8,15 @@ const config = require('../../config/config');
 
 chai.config.includeStack = true;
 
-describe('## Measurements APIs', () => {
+describe('## Charts APIs', () => {
   const invalidToken = {
     token: 'Bearer token'
   };
 
-  describe('# GET /api/measurements/powerfactor', () => {
+  describe('# GET /api/charts/powerfactor', () => {
     // it('should expect a Token',  (done) => {
     //   request(app)
-    //     .get('/api/measurements/powerfactor')
+    //     .get('/api/charts/powerfactor')
     //     .set('Authorization',invalidToken)
     //     .expect(httpStatus.UNAUTHORIZED)
     //     .then((res) => {
@@ -27,7 +27,7 @@ describe('## Measurements APIs', () => {
 
     it('should return missing parameters error', (done) => {
       request(app)
-        .get('/api/measurements/powerfactor')
+        .get('/api/charts/powerfactor')
         .expect(httpStatus.BAD_REQUEST)
         .then((res) => {
           expect(res.body.message).to.equal('"b1" is required and "b2" is required and "b3" is required');
@@ -38,7 +38,7 @@ describe('## Measurements APIs', () => {
 
     it('should return missing parameters error', (done) => {
       request(app)
-        .get('/api/measurements/powerfactor?b1=Jundiai')
+        .get('/api/charts/powerfactor?b1=Jundiai')
         .expect(httpStatus.BAD_REQUEST)
         .then((res) => {
           expect(res.body.message).to.equal('"b2" is required and "b3" is required');
@@ -50,7 +50,7 @@ describe('## Measurements APIs', () => {
 
     it('should return all powerfactor data', (done) => {
       request(app)
-        .get('/api/measurements/powerfactor?b1=Jundiai&b2=EB Park&b3=QG34REST')
+        .get('/api/charts/powerfactor?b1=Jundiai&b2=EB Park&b3=QG34REST')
         .expect(httpStatus.OK)
         .then((res) => {
           res.body.every(pwf => expect(pwf).to.have.all.keys('value1', 'date'));

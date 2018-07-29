@@ -1,18 +1,5 @@
-# Express & Sequelize REST API Boilerplate in ES6 with Code Coverage [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
-[![Build Status](https://img.shields.io/travis/marcoswca/siemens-backend/master.svg?style=flat-square)](https://travis-ci.org/marcoswca/siemens-backend)
-[![Coverage Status](https://img.shields.io/coveralls/marcoswca/siemens-backend/master.svg?style=flat-square)](https://coveralls.io/github/marcoswca/siemens-backend?branch=master)
-[![Code Climate](https://img.shields.io/codeclimate/github/marcoswca/siemens-backend.svg?style=flat-square)](https://codeclimate.com/github/marcoswca/siemens-backend)
-[![bitHound Overall Score](https://www.bithound.io/github/marcoswca/siemens-backend/badges/score.svg)](https://www.bithound.io/github/marcoswca/siemens-backend)
-[![bitHound Dependencies](https://www.bithound.io/github/marcoswca/siemens-backend/badges/dependencies.svg)](https://www.bithound.io/github/marcoswca/siemens-backend/master/dependencies/npm)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)](http://commitizen.github.io/cz-cli/)
-[![MIT License](https://img.shields.io/npm/l/stack-overflow-copy-paste.svg?style=flat-square)](http://opensource.org/licenses/MIT)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![Support via Paypal](https://img.shields.io/badge/support-paypal-yellowgreen.svg?style=flat-square)](https://www.paypal.me/marcoswca)
-
-[![Code Sponsor](https://app.codesponsor.io/embed/J9YBdeLoqYqrG8tmMKF4p6Pv/marcoswca/siemens-backend.svg)](https://app.codesponsor.io/link/J9YBdeLoqYqrG8tmMKF4p6Pv/marcoswca/siemens-backend)
-
-# [![Express ES6 REST API Starter](https://cloud.githubusercontent.com/assets/4172932/12660610/90f5b856-c63a-11e5-878e-c9f0bbf33090.jpg)](https://github.com/marcoswca/siemens-backend)
+# [![Express ES6 REST API Starter](https://cloud.githubusercontent.com/assets/4172932/12660610/90f5b856-c63a-11e5-878e-c9f0bbf33090.jpg)](https://github.com/rildomar/iskynote-back.git)
 
 ## Overview
 
@@ -44,8 +31,8 @@ Heavily inspired from [Egghead.io - How to Write an Open Source JavaScript Libra
 
 Clone the repo:
 ```sh
-git clone http://150.165.85.22/projeto-cor/siemens-backend.git
-cd siemens-backend
+git clone https://github.com/rildomar/iskynote-back.git
+cd iskynote-backend
 ```
 
 Install yarn:
@@ -69,7 +56,7 @@ Start server:
 yarn start
 
 # Selectively set DEBUG env var to get logs
-DEBUG=siemens-backend:* yarn start
+DEBUG=iskynote-backend:* yarn start
 ```
 Refer [debug](https://www.npmjs.com/package/debug) to know how to selectively turn on logs.
 
@@ -158,10 +145,10 @@ bash bin/development.sh
 # To use this option you need to make sure mongodb is listening on port 27017
 
 # Build docker 
-docker build -t siemens-backend .
+docker build -t iskynote-backend .
 
 # Run docker
-docker run -p 4040:4040 siemens-backend
+docker run -p 4040:4040 iskynote-backend
 ```
 
 
@@ -178,11 +165,11 @@ If you would prefer not to use any of our tooling, delete the following files fr
 Contributions, questions and comments are all welcome and encouraged. For code contributions submit a pull request with unit test.
 
 ## License
-This project is licensed under the [MIT License](https://github.com/marcoswca/siemens-backend/blob/master/LICENSE)
+<!-- This project is licensed under the [MIT License](https://github.com/marcoswca/siemens-backend/blob/master/LICENSE) -->
 
 Your support is greatly appreciated.
 
 ## Meta
 
-Marcos Arruda – [@marcoswca1](https://twitter.com/marcoswca1) – marcoswca1@gmail.com
+Rildomar Lucena – rildo.omar@gmail.com
 

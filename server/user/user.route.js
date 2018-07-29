@@ -16,11 +16,18 @@ const secret = {
 router.route('/')
   .get(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.list)
   .post(validate(paramValidation.createUser), userCtrl.createUser)
-  .put(expressJwt(secret), userCtrl.load, userCtrl.updateUser)
+  .put(expressJwt(secret), validate(paramValidation.updateUser), userCtrl.load, userCtrl.updateUser)
   .delete(expressJwt(secret), userCtrl.deleteUser);
 
 router.route('/profile')
   .get(expressJwt(secret), userCtrl.load, userCtrl.getProfile);
+
+router.route('/password')
+  .put(expressJwt(secret), validate(paramValidation.changePasswordUserLogged), userCtrl.load, userCtrl.changePasswordUserLogged)
+
+
+router.route('/b1')
+  .get(expressJwt(secret), userCtrl.b1ByLoggedUser);
 
 router.route('/:id')
   .get(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.findById)

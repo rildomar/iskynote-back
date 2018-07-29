@@ -3,8 +3,9 @@ const Joi = require('joi');
 module.exports = {
   weatherFields: {
     query: {
-      latitude: Joi.number().required(),
-      longitude: Joi.number().required()
+      city: Joi.string().required(),
+      uf: Joi.string().required(),
+      unity: Joi.string().required()
     }
   }
 };

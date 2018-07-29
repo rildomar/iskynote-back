@@ -10,8 +10,8 @@ chai.config.includeStack = true;
 
 describe('## Auth APIs', () => {
   const validUserCredentials = {
-    login: 'rildomar',
-    password: '123'
+    login: 'marcoswca',
+    password: '1234'
   };
 
   const invalidUserCredentials = {

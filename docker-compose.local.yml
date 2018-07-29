@@ -5,7 +5,7 @@ services:
     ports:
     - "3306:3306"
 
-  siemens-cor:
+  iskynote:
     build:
       context: .
     volumes:
@@ -30,9 +30,9 @@ services:
     environment:
       - JWT_SECRET=0a6b944d-d2fb-46fc-a85e-0295c986cd9f
       - PORT=3000
-      - DB_USERNAME=root
-      - DB_PASSWORD=siemens
-      - DB_NAME=siemens
+      - DB_USERNAME=rildomar
+      - DB_PASSWORD=rRildo123
+      - DB_NAME=iskynote
       - DB_HOSTNAME=mysql
       - DB_DIALECT=mysql
     depends_on:

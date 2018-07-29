@@ -15,3 +15,4 @@ router.route('/')
   .get(expressJwt(secret), validate(paramValidation.weatherFields), weatherCtrl.weatherData);
 
 module.exports = router;
+

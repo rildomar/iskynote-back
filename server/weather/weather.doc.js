@@ -4,10 +4,10 @@
  *   Weather:
  *     type: object
  *     properties:
- *       latitude:
- *         type: number
- *       longitude:
- *         type: number
+ *       City:
+ *         type: string
+ *       Uf:
+ *         type: string
  */
 
  /**
@@ -16,6 +16,7 @@
  *   get:
  *     tags:
  *       - Weather
+ *     summary: To get weather data of a city.
  *     description: Get weather data
  *     security:
  *      - JWT: [admin]   # Use OAuth with a different scope
@@ -24,10 +25,10 @@
  *     consumes:
  *       - application/json
  *     parameters:
- *       - name: latitude
+ *       - name: city
  *         in: query
  *         required: true
- *       - name: longitude
+ *       - name: uf
  *         in: query
  *         required: true
  *     responses:

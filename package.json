@@ -1,5 +1,5 @@
 {
-  "name": "siemens-cor",
+  "name": "iskynote",
   "version": "5.0.0",
   "description": "A Boilerplate application for building REST APIs using express, sequelize in ES6 with code coverage",
   "author": "Marcos Arruda <marcoswca1@gmail.com>",
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "nodemon index.js",
-    "start:debug": "cross-env DEBUG=siemens-cor:* yarn start",
+    "start:debug": "cross-env DEBUG=iskynote:* yarn start",
     "lint": "esw *.js server config --color",
     "lint:watch": "yarn lint -- --watch",
     "test": "cross-env NODE_ENV=test ./node_modules/.bin/mocha --ui bdd --reporter spec --colors server --recursive",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://150.165.85.22/projeto-cor/siemens-backend.git"
+    "url": "https://github.com/rildomar/iskynote-back.git"
   },
   "keywords": [
     "express",

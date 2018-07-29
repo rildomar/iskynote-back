@@ -1,20 +1,22 @@
 /**
-* @swagger
-* definitions:
-*   Login:
-*     type: object
-*     properties:
-*       login:
-*         type: string
-*       password:
-*         type: string
-*/
+ * @swagger
+ * definitions:
+ *   Login:
+ *     type: object
+ *     properties:
+ *       login:
+ *         type: string
+ *       password:
+ *         type: string
+ */
+
 /**
  * @swagger
  * /auth/login:
  *   post:
  *     tags:
  *       - Auth
+ *     summary: Auth service.
  *     description: Auth service
  *     produces:
  *       - application/json

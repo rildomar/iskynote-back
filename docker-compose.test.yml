@@ -5,7 +5,7 @@ services:
     ports:
     - "3306:3306"
 
-  siemens-cor:
+  iskynote:
     build:
       context: .
     volumes:
