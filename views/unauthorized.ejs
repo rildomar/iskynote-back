@@ -1,0 +1,34 @@
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Helvetica, Arial, Sans-Serif;
+            margin-top: 5em;
+        }
+
+        h1 {
+            font-size: 3em;
+        }
+
+        h2 {
+            font-size: 2em
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <h1>Acesso Negado (
+            <%=error.name%>)</h1>
+        <h2>(╯°□°）╯︵ ┻━┻</h2>
+        <br>
+        <%=error.message%>
+            <br>
+            <h2>Error:
+                <%=error.status%>
+            </h2>
+    </center>
+</body>
+
+</html>
