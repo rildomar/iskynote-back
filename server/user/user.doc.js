@@ -186,7 +186,7 @@
  *     parameters:
  *       - name: body
  *         in: body
- *         description:
+ *         description: Send with json, old password with the new password.
  *         required: True
  *         schema:
  *           type: object
