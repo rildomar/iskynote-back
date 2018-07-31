@@ -2,7 +2,6 @@ const YQL = require('yql');
 
 module.exports.weatherData = async (req, res, next) => {
   try {
-    // console.log('@@@@@@@@@@@@@@@@@@@@', );
     var query = new YQL(getWeatherQuery(req.query.city, req.query.uf, req.query.unity));
 
 
@@ -15,6 +14,6 @@ module.exports.weatherData = async (req, res, next) => {
 };
 
 getWeatherQuery = (city, uf, unity) => {
-  return 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'+
-    city + ','+ uf+'") and u="'+ unity +'"'
+  return 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' +
+    city + ',' + uf + '") and u="' + unity + '"'
 };
