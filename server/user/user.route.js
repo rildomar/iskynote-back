@@ -25,10 +25,6 @@ router.route('/profile')
 router.route('/password')
   .put(expressJwt(secret), validate(paramValidation.changePasswordUserLogged), userCtrl.load, userCtrl.changePasswordUserLogged)
 
-
-router.route('/b1')
-  .get(expressJwt(secret), userCtrl.b1ByLoggedUser);
-
 router.route('/:id')
   .get(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.findById)
   .put(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.updateUserById)

@@ -84,7 +84,7 @@
  *  get:
  *    tags:
  *      - Users
- *    summary: Find any users by id.
+ *    summary: Find any user by id.
  *    description: Find user by id
  *    security:
  *      - JWT: [admin]   # Use OAuth with a different scope
@@ -102,7 +102,19 @@
  *         description: Operation executed with success
  *         schema:
  *           type: object
- *           $ref: "#/definitions/User"
+ *           properties:
+ *              idUser_sky:
+ *                type: string
+ *              username:
+ *                type: string
+ *              name:
+ *                type: string
+ *              celphone:
+ *                type: string
+ *              createdAt:
+ *                type: string
+ *              role:
+ *                type: string
  *       400:
  *         description: Bad request
  *       401:
@@ -123,7 +135,7 @@
  *     summary: Get profile user logged.
  *     description: Get user logged
  *     security:
- *      - JWT200: [admin]   # Use OAuth with a different scope
+ *      - JWT: [admin]   # Use OAuth with a different scope
  *     produces:
  *       - application/json
  *     consumes:
@@ -133,7 +145,19 @@
  *         description: Operation executed with success
  *         schema:
  *           type: object
- *           $ref: "#/definitions/User"
+ *           properties:
+ *              idUser_sky:
+ *                type: string
+ *              username:
+ *                type: string
+ *              name:
+ *                type: string
+ *              celphone:
+ *                type: string
+ *              createdAt:
+ *                type: string
+ *              role:
+ *                type: string
  *       400:
  *         description: Bad request
  *       401:
@@ -207,8 +231,21 @@
  *         schema:
  *           type: array
  *           items:
- *             schema:
- *               $ref: "#/definitions/User"
+ *               type: object
+ *               properties:
+ *                  idUser_sky:
+ *                    type: string
+ *                  username:
+ *                    type: string
+ *                  name:
+ *                    type: string
+ *                  celphone:
+ *                    type: string
+ *                  createdAt:
+ *                    type: string
+ *                  role:
+ *                    type: string
+ *             
  *       400:
  *         description: Bad request
  *       401:

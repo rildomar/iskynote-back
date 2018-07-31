@@ -79,8 +79,10 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.deleteUserById = async (req, res, next) => {
   try {
-    let query = "DELETE FROM users where idUsers_sky = ?";
+    let query = "UPDATE users as u SET u.block = 1 WHERE u.idUser_sky = ?";
     let data = [req.params.id];
+
+
 
     const [rows, fields] = await req.connection.execute(query, data);
     res.json(rows);
@@ -88,7 +90,7 @@ exports.deleteUserById = async (req, res, next) => {
     next(error);
   }
 };
-
+// TODO
 exports.updateUser = async (req, res, next) => {
   try {
     let query = "";
@@ -108,7 +110,7 @@ exports.updateUser = async (req, res, next) => {
     next(error);
   }
 };
-
+// TODO
 exports.updateUserById = async (req, res, next) => {
   try {
     req.body.role = req.body.role.toUpperCase();
@@ -130,11 +132,11 @@ exports.updateUserById = async (req, res, next) => {
     next(error);
   }
 };
-
+//OK
 exports.load = async (req, res, next) => {
-
   try {
-    const [rows, fields] = await req.connection.execute('SELECT u.id, u.name, u.email, u.login, u.role FROM users u WHERE id=?', [req.user.id]);
+    const query = 'SELECT u.idUser_sky, u.username, p.name,  p.email, p.celphone, u.createdAt, u.role FROM users as u INNER JOIN pessoa as p ON u.Pessoa_idPessoa = p.idPessoa where u.idUser_sky=?';
+    const [rows, fields] = await req.connection.execute(query, [req.user.idUser_sky]);
     const user = rows[0];
 
     if (!user) {
@@ -147,29 +149,31 @@ exports.load = async (req, res, next) => {
     next(error);
   }
 };
-
+//OK
 exports.getProfile = async (req, res, next) => {
+  console.log('getProfile', req.userL);
   res.json(req.userL);
 };
-
+//OK
 exports.list = async (req, res, next) => {
   try {
-    const [rows, fields] = await req.connection.execute('SELECT u.id, u.name, u.email, u.login, u.role FROM users u');
+    const [rows, fields] = await req.connection.execute('SELECT u.idUser_sky, u.username, u.role, u.createdAt FROM users as u');
     res.json(rows);
   } catch (error) {
     next(error);
   }
 };
-
+//OK
 exports.findById = async (req, res, next) => {
   try {
-    const [rows, fields] = await req.connection.execute("SELECT u.id, u.name, u.email, u.login, u.role FROM users u WHERE id=?", [req.params.id]);
+    const query = 'SELECT u.idUser_sky, u.username, p.name,  p.email, p.celphone, u.createdAt, u.role FROM users as u INNER JOIN pessoa as p ON u.Pessoa_idPessoa = p.idPessoa where u.idUser_sky=?';
+    const [rows, fields] = await req.connection.execute(query, [req.params.id]);
     res.json(rows);
   } catch (error) {
     next(error);
   }
 };
-
+//OK
 exports.changePasswordUserLogged = async (req, res, next) => {
   try {
     let query = "";
@@ -177,15 +181,15 @@ exports.changePasswordUserLogged = async (req, res, next) => {
     if (req.body.password) {
 
       req.body.password = HashPassword.getHash(req.body.password);
-      query = "SELECT password FROM users WHERE id = ?";
-      data = [req.user.id];
+      query = "SELECT password FROM users WHERE idUser_sky = ?";
+      data = [req.user.idUser_sky];
       const [rows, fields] = await req.connection.execute(query, data);
-
+      console.log("ROWS -> ", rows)
       if (req.body.password === rows[0].password) {
         req.body.newPassword = HashPassword.getHash(req.body.newPassword);
 
-        query = "UPDATE users SET password = ? WHERE id = ?";
-        data = [req.body.newPassword, req.user.id];
+        query = "UPDATE users SET password = ? WHERE idUser_sky = ?";
+        data = [req.body.newPassword, req.user.idUser_sky];
         const [rowsup, fieldsup] = await req.connection.execute(query, data);
 
         res.json(rowsup)
@@ -195,15 +199,6 @@ exports.changePasswordUserLogged = async (req, res, next) => {
         });
       }
     } // end-if-pw
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports.b1ByLoggedUser = async (req, res, next) => {
-  try {
-    const [rows, fields] = await req.connection.execute('SELECT b1t.b1_label FROM users_b1 AS ub1, b1 AS b1t WHERE ub1.users_id=? AND ub1.b1_id=b1t.id;', [req.user.id]);
-    res.json(rows);
   } catch (error) {
     next(error);
   }

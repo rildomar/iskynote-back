@@ -14,14 +14,18 @@ exports.login = async (req, res, next) => {
       return next(new APIError('Not Found', httpStatus.NOT_FOUND, true));
     } else {
       let user = rows[0];
-      if (user.password === hashPassword.getHash(req.body.password)) {
-        delete user.password;
-        const token = jwt.sign(user, config.jwtSecret);
-        return res.json({
-          token: token
-        });
+      if(user.block === 0){
+        if (user.password === hashPassword.getHash(req.body.password)) {
+          delete user.password;
+          const token = jwt.sign(user, config.jwtSecret);
+          return res.json({
+            token: token
+          });
+        } else {
+          return next(new APIError('Not Found', httpStatus.NOT_FOUND, true));
+        }
       } else {
-        return next(new APIError('Not Found', httpStatus.NOT_FOUND, true));
+        return next(new APIError('User blocked. Contact administrators -> www.iskynote.com/contacts', httpStatus.UNAUTHORIZED, true));
       }
 
     }
