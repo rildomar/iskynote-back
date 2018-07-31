@@ -9,7 +9,7 @@ const hashPassword = require('../helpers/HashPassword');
 exports.login = async (req, res, next) => {
   try {
 
-    const [rows, fields] = await req.connection.execute('SELECT * from users WHERE `login` = ?', [req.body.login]);
+    const [rows, fields] = await req.connection.execute('SELECT * from users WHERE `username` = ?', [req.body.username]);
     if (!rows.length) {
       return next(new APIError('Not Found', httpStatus.NOT_FOUND, true));
     } else {

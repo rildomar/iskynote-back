@@ -15,7 +15,7 @@ const secret = {
 
 router.route('/')
   .get(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.list)
-  .post(validate(paramValidation.createUser), userCtrl.createUser)
+  .post(userCtrl.createUser)
   .put(expressJwt(secret), validate(paramValidation.updateUser), userCtrl.load, userCtrl.updateUser)
   .delete(expressJwt(secret), userCtrl.deleteUser);
 

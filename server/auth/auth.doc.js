@@ -4,7 +4,7 @@
  *   Login:
  *     type: object
  *     properties:
- *       login:
+ *       username:
  *         type: string
  *       password:
  *         type: string

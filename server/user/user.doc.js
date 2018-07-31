@@ -4,18 +4,45 @@
  *   User:
  *     type: object
  *     properties:
- *       name:
- *         type: string
- *       email:
- *         type: string
- *       login:
+ *       username:
  *         type: string
  *       password:
  *         type: string
  *       role:
  *         type: string
+ *       pesssoa:
+ *          type: object
+ *          properties:
+ *              name:
+ *                type: string
+ *              email:
+ *                type: string
+ *              celphone:
+ *                type: string
+ *              cbpq:
+ *                type: number
+ *              site_cbpq:
+ *                type: string
+ *              uspa:
+ *                type: number
+ *              site_uspa:
+ *                type: string
+ *              height:
+ *                type: number
+ *              weight:
+ *                type: number
+ *              typeOfBlood:
+ *                type: string
+ *              endereco:
+ *                type: object
+ *                properties:
+ *                  address:
+ *                    type: string
+ *                  city:
+ *                    type: string
+ *                  state:
+ *                    type: string
  */
-
 
 /**
  * @swagger
