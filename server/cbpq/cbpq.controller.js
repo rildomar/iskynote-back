@@ -7,15 +7,19 @@ module.exports.cbpqData = async (req, res, next) => {
   try {
 
     const atleta = {historico: [], evolucao: []}
-    const licenca = req.query.cbpq;
-    
+    let link;
 
-    xray('https://www.cbpq.org.br/site/filiados/consulta-licenca?cbpq=' + licenca + '&cpf=', 'div.form-group', [{
+    if (!req.query.cbpq) {
+      link = `https://www.cbpq.org.br/site/filiados/consulta-licenca?cbpq=&cpf=${req.query.cpf}`;
+    } else {
+      link = `https://www.cbpq.org.br/site/filiados/consulta-licenca?cbpq=${req.query.cbpq}&cpf=${req.query.cpf}`;
+    }
+    console.log(link)
+    xray(link, 'div.form-group', [{
       label: 'label',
       valor: 'p',
       img: 'img@src'
     }])(function (err, results) {
-
       results.map((result) => {
         switch (result.label) {
           case 'Status':
@@ -74,7 +78,7 @@ module.exports.cbpqData = async (req, res, next) => {
         }
       });
 
-      xray('https://www.cbpq.org.br/site/filiados/consulta-licenca?cbpq=' + licenca + '&cpf=', '.col-md-12', [{
+      xray(link, '.col-md-12', [{
         title: 'span',
         historic: xray('.col-md-12', '.row', [
           {
@@ -89,20 +93,19 @@ module.exports.cbpqData = async (req, res, next) => {
           switch (resultsObj.title) {
             case 'Histórico de Mudança de Categoria':
               resultsObj.historic.map((historico) => {
-                atleta.historico.push({value : fazerTrim(historico.value)});
+                atleta.historico.push(fazerTrim(historico.value));
               });
               break;
 
             case 'Evolução':
               resultsObj.historic.map((historico) => {
-                atleta.evolucao.push({value: fazerTrim(historico.value)});
+                atleta.evolucao.push(fazerTrim(historico.value));
               });
             default:
               break;
           };
 
         });
-
         res.json(atleta);
         
       }) // results para o historic e evolucao

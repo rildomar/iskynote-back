@@ -11,8 +11,11 @@ const secret = {
   secret: config.jwtSecret
 };
 
+//router.route('/')
+//  .get(expressJwt(secret), validate(paramValidation.cbpqField), cbpqCtrl.cbpqData);
+
 router.route('/')
-  .get(expressJwt(secret), validate(paramValidation.cbpqField), cbpqCtrl.cbpqData);
+  .get(cbpqCtrl.cbpqData);
 
 module.exports = router;
 

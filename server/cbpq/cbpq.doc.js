@@ -57,10 +57,10 @@
  *     parameters:
  *       - name: cbpq
  *         in: query
- *         required: true
+ *         required: false
  *       - name: cpf
  *         in: query
- *         required: false
+ *         required: true
  *     responses:
  *       200:
  *         description: Operation executed with success
