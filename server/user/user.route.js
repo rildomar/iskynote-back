@@ -1,34 +1,25 @@
 const express = require('express');
 const validate = require('express-validation');
 const expressJwt = require('express-jwt');
+const router = express.Router(); // eslint-disable-line new-cap
+const config = require('../../config/config');
 
 const paramValidation = require('./user.validator');
-const userCtrl = require('./user.controller');
-const config = require('../../config/config');
 const routerGuard = require('../helpers/RouterGuard');
 
-const router = express.Router(); // eslint-disable-line new-cap
+const userCtrl = require('./user.controller');
+const addressCtrl = require('./../address/address.controller');
+const personCtrl = require('./../person/person.controller');
+
+const addressRoutes = require('./../address/address.route')
 
 const secret = {
   secret: config.jwtSecret
 };
-
+//Falta terminar
 router.route('/')
-  .get(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.list)
-  .post(userCtrl.createUser)
-  .put(expressJwt(secret), validate(paramValidation.updateUser), userCtrl.load, userCtrl.updateUser)
-  .delete(expressJwt(secret), userCtrl.deleteUser);
+  .post(personCtrl.create ,userCtrl.create);
 
-router.route('/profile')
-  .get(expressJwt(secret), userCtrl.load, userCtrl.getProfile);
-
-router.route('/password')
-  .put(expressJwt(secret), validate(paramValidation.changePasswordUserLogged), userCtrl.load, userCtrl.changePasswordUserLogged)
-
-router.route('/:id')
-  .get(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.findById)
-  .put(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.updateUserById)
-  .delete(expressJwt(secret), routerGuard.checkPermission(['ADMIN']), userCtrl.load, userCtrl.deleteUserById);
-
+router.use('/address', addressRoutes);
 
 module.exports = router;
