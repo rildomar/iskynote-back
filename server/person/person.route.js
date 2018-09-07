@@ -1,25 +1,26 @@
 const express = require('express');
 const validate = require('express-validation');
 const expressJwt = require('express-jwt');
-const router = express.Router(); // eslint-disable-line new-cap
-const config = require('../../config/config');
 
 const paramValidation = require('./user.validator');
+const config = require('../../config/config');
 const routerGuard = require('../helpers/RouterGuard');
 
-const userCtrl = require('./user.controller');
+const personCtrl = require('./person.controller');
 
+const router = express.Router(); // eslint-disable-line new-cap
 
 const secret = {
   secret: config.jwtSecret
 };
 
 router.route('/')
-  .post(userCtrl.create);
+  .get(personCtrl.list)
+  .post(personCtrl.create, personCtrl.created);
 
 router.route('/:id')
-  .get(userCtrl.load, userCtrl.getProfile)
-  .put(userCtrl.update)
-  .delete(userCtrl.delete);
+  .get(personCtrl.getById)
+  .put(personCtrl.update)
+  .delete(personCtrl.delete);
 
 module.exports = router;
