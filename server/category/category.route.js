@@ -5,7 +5,7 @@ const expressJwt = require('express-jwt');
 const config = require('../../config/config');
 const routerGuard = require('../helpers/RouterGuard');
 
-const equipmentCtrl = require('./equipment.controller');
+const categoryCtrl = require('./category.controller');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -14,11 +14,13 @@ const secret = {
 };
 
 router.route('/')
-  .post(equipmentCtrl.create, equipmentCtrl.created);
+  .post(categoryCtrl.create, categoryCtrl.created);
 
 router.route('/:id')
-  .get(equipmentCtrl.find)
-  .put(equipmentCtrl.update)
-  .delete(equipmentCtrl.delete);
+  .put(categoryCtrl.update)
+  .delete(categoryCtrl.delete);
+
+router.route('/logbook/:id')
+  .post(categoryCtrl.fetchByLogBookId);
 
 module.exports = router;

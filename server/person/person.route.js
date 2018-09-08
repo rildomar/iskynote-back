@@ -2,7 +2,6 @@ const express = require('express');
 const validate = require('express-validation');
 const expressJwt = require('express-jwt');
 
-const paramValidation = require('./user.validator');
 const config = require('../../config/config');
 const routerGuard = require('../helpers/RouterGuard');
 

@@ -14,7 +14,6 @@ module.exports.cbpqData = async (req, res, next) => {
     } else {
       link = `https://www.cbpq.org.br/site/filiados/consulta-licenca?cbpq=${req.query.cbpq}&cpf=${req.query.cpf}`;
     }
-    console.log(link)
     xray(link, 'div.form-group', [{
       label: 'label',
       valor: 'p',

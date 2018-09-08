@@ -17,7 +17,7 @@ const create = async (req, res, next) => {
       new Date(),
       new Date(),
       res.personObj.insertId,
-      0
+      res.logBookObj.insertId
     ];
     const [rows, fields] = await req.connection.execute(query, data);
     res.json(create);

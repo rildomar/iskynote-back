@@ -18,14 +18,11 @@ router.get('/health-check', (req, res) =>
 // mount user routes at /users
 router.use('/users', userRoutes);
 
+// mount user routs at CBPQ
+router.use('/cbpq', cbpqRoutes);
+
 // mount user routes at /weather
 router.use('/weather', weatherRoutes);
-
-// mount auth routes at /auth
-router.use('/auth', authRoutes);
-
-// mount cbpq routes at /cbpq
-router.use('/cbpq', cbpqRoutes);
 
 // mount documentation routes at /docs
 router.use('/docs', swaggerDoc());
