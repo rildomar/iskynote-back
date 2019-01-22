@@ -1,20 +1,36 @@
 // get the client
-const mysql = require('mysql2/promise');
+const mysql2 = require('mysql2');
 const bluebird = require('bluebird');
 const dbConfig = require('./config')['database'];
 
-function dbConnection() {
-  return new Promise((resolve, reject) => {
-    mysql.createConnection({
+function createPool() {
+  try {
+    const pool = mysql2.createPool({
       host: dbConfig.host,
       user: dbConfig.username,
       database: dbConfig.database,
       password: dbConfig.password,
-      Promise: bluebird
-    }).then((connection) => {
-      return resolve(connection);
+      Promise: bluebird,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0
     });
-  });
+
+    const promisePool = pool.promise();
+
+    return promisePool;
+  } catch (error) {
+    return console.log(`Could not connect - ${error}`);
+  }
 }
 
-module.exports = dbConnection;
+const pool = createPool();
+
+// module.exports = {
+//   dbConnRildo: async () => pool.getConnection(),
+//   execute: (...params) => pool.execute(...params)
+// };
+
+// module.exports = dbConnection;
+
+module.exports = pool;

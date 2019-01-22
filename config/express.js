@@ -17,7 +17,7 @@ const config = require('./config');
 const APIError = require('../server/helpers/APIError');
 const swaggerConfig = require('./swagger');
 const mysql = require('../config/mysql');
-
+const schedule = require('../server/schedule/index');
 const app = express();
 
 app.set('views', path.join(__dirname, '../views'));
@@ -48,23 +48,16 @@ app.use(cors());
 swaggerConfig(app);
 
 // enable detailed API logging in dev env
-if (config.env === 'development') {
-  expressWinston.requestWhitelist.push('body');
-  expressWinston.responseWhitelist.push('body');
-  app.use(expressWinston.logger({
-    winstonInstance,
-    meta: true, // optional: log meta data about request (defaults to true)
-    msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-    colorStatus: true // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
-  }));
-}
-
-app.use((req, res, next) => {
-  mysql().then((connection) => {
-    req.connection = connection;
-    return next();
-  });
-});
+// if (config.env === 'development') {
+//   expressWinston.requestWhitelist.push('body');
+//   expressWinston.responseWhitelist.push('body');
+//   app.use(expressWinston.logger({
+//     winstonInstance,
+//     meta: false, // optional: log meta data about request (defaults to true)
+//     msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
+//     colorStatus: true // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
+//   }));
+// }
 
 app.use(jwt({
   secret: config.jwtSecret,
@@ -92,7 +85,12 @@ app.use((err, req, res, next) => {
     const error = new APIError(unifiedErrorMessage, err.status, true);
     return next(error);
   } else if (!(err instanceof APIError)) {
-    const apiError = new APIError(err.message, err.status, err.isPublic);
+    let apiError = '';
+    if (err.toString().indexOf(`Bind parameters must not contain undefined`) > -1) {
+      apiError = new APIError('Bad Request: Parameters must not contain undefined', httpStatus.BAD_REQUEST, err.isPublic);
+    } else {
+      apiError = new APIError(err.message, err.status, err.isPublic);
+    }
     return next(apiError);
   }
   return next(err);
@@ -105,11 +103,11 @@ app.use((req, res, next) => {
 });
 
 // log error in winston transports except when executing test suite
-if (config.env !== 'test') {
-  app.use(expressWinston.errorLogger({
-    winstonInstance
-  }));
-}
+// if (config.env !== 'test') {
+//   app.use(expressWinston.errorLogger({
+//     winstonInstance
+//   }));
+// }
 
 // error handler, send stacktrace only during development
 app.use((err, req, res, next) => // eslint-disable-line no-unused-vars

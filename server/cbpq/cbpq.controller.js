@@ -1,12 +1,50 @@
 const YQL = require('yql');
 const Xray = require('x-ray');
+const db = require('../../config/mysql');
 
 const xray = new Xray();
 
-module.exports.cbpqData = async (req, res, next) => {
+const updateCbpqData = async (req, res, next) => {
   try {
 
-    const atleta = {historico: [], evolucao: []}
+    const sql = `
+      INSERT INTO iskynote_db.cbpq
+        (categoria, habilitacao, filiacao, validade, dt_emissao_credencial, createAt, updateAt, status)
+        VALUES
+        (?,?,?,?,?,?,?,?);
+    `;
+    const data =
+      [
+        req.atleta.categoria,
+        req.atleta.habilitacao,
+        new Date(fixDateCBPQ(req.atleta.filiacao)),
+        new Date(fixDateCBPQ(req.atleta.validade)),
+        new Date(fixDateCBPQ(req.atleta.emissao)),
+        new Date(),
+        new Date(),
+        req.atleta.status
+      ]
+
+    const [rows, fields] = await db.execute(sql, data);
+    res.json(rows);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const fixDateCBPQ = (date) => {
+  let splitDate = date.split('/');
+  let dia = splitDate[0];
+  let mes = splitDate[1];
+  let ano = splitDate[2];
+  return ano + '-' + mes + '-' + dia;
+}
+
+const cbpqData = async (req, res, next) => {
+  try {
+
+    const atleta = { historico: [], evolucao: [] }
     let link;
 
     if (!req.query.cbpq) {
@@ -105,10 +143,12 @@ module.exports.cbpqData = async (req, res, next) => {
           };
 
         });
-        res.json(atleta);
-        
+        req.atleta = atleta;
+        return next();
+        // res.json(atleta);
+
       }) // results para o historic e evolucao
-      
+
     }) // 1€ x-ray
   } catch (error) {
     next(error);
@@ -118,3 +158,8 @@ module.exports.cbpqData = async (req, res, next) => {
 function fazerTrim(string) {
   return string.replace(/^\s+|\s+$/g, "");
 }
+
+module.exports = {
+  cbpqData: cbpqData,
+  updateCbpqData: updateCbpqData
+};

@@ -15,7 +15,7 @@ const secret = {
 //  .get(expressJwt(secret), validate(paramValidation.cbpqField), cbpqCtrl.cbpqData);
 
 router.route('/')
-  .get(cbpqCtrl.cbpqData);
+  .get(cbpqCtrl.cbpqData, cbpqCtrl.updateCbpqData);
 
 module.exports = router;
 
