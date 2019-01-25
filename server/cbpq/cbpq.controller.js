@@ -1,34 +1,109 @@
 const YQL = require('yql');
 const Xray = require('x-ray');
 const db = require('../../config/mysql');
+const down = require('../../config/imageDownloader');
 
 const xray = new Xray();
 
 const updateCbpqData = async (req, res, next) => {
   try {
 
+    if (req.atleta.rastreamento || req.atleta.emissao) {
+      const sql = `
+        INSERT INTO iskynote_db.cbpq
+          (
+            categoria,
+            habilitacao,
+            filiacao,
+            validade,
+            dt_emissao_credencial,
+            createAt,
+            updateAt,
+            status,
+            numCbpq,
+            rastreamento
+            )
+          VALUES
+          (?,?,?,?,?,?,?,?,?,?);
+      `;
+      const data =
+        [
+          req.atleta.categoria,
+          req.atleta.habilitacao,
+          new Date(fixDateCBPQ(req.atleta.filiacao)),
+          new Date(fixDateCBPQ(req.atleta.validade)),
+          new Date(fixDateCBPQ(req.atleta.emissao)),
+          new Date(),
+          new Date(),
+          req.atleta.status,
+          req.atleta.cbpq,
+          req.atleta.rastreamento
+        ]
+      const [rows, fields] = await db.execute(sql, data);
+
+      req.atleta.cbpq_id = rows.insertId
+      return next();
+    } else {
+      const sql = `
+        INSERT INTO iskynote_db.cbpq
+          (categoria, habilitacao, filiacao, validade, createAt, updateAt, status, numCbpq)
+          VALUES
+          (?,?,?,?,?,?,?,?);
+      `;
+      const data =
+        [
+          req.atleta.categoria,
+          req.atleta.habilitacao,
+          new Date(fixDateCBPQ(req.atleta.filiacao)),
+          new Date(fixDateCBPQ(req.atleta.validade)),
+          new Date(),
+          new Date(),
+          req.atleta.status,
+          req.atleta.cbpq
+        ]
+      const [rows, fields] = await db.execute(sql, data);
+
+      req.atleta.cbpq_id = rows.insertId
+      return next();
+    }
+
+  } catch (error) {
+    console.log('CBPQ - ERROR', error);
+    next(error);
+  }
+};
+
+const createPersonData = async (req, res, next) => {
+  try {
+
     const sql = `
-      INSERT INTO iskynote_db.cbpq
-        (categoria, habilitacao, filiacao, validade, dt_emissao_credencial, createAt, updateAt, status)
-        VALUES
-        (?,?,?,?,?,?,?,?);
-    `;
+    INSERT INTO pessoa
+    (
+      name,
+      createdAt,
+      updatedAt,
+      numCpf,
+      cbpq_cbpq_id,
+      img
+    )
+    VALUES
+    (?,?,?,?,?,?);
+    `; // parei em criar a pessoa depois de criar a cbpq.
     const data =
       [
-        req.atleta.categoria,
-        req.atleta.habilitacao,
-        new Date(fixDateCBPQ(req.atleta.filiacao)),
-        new Date(fixDateCBPQ(req.atleta.validade)),
-        new Date(fixDateCBPQ(req.atleta.emissao)),
+        req.atleta.atleta,
         new Date(),
         new Date(),
-        req.atleta.status
-      ]
-
+        parseInt(req.query.cpf),
+        req.atleta.cbpq_id,
+        req.atleta.img
+      ];
     const [rows, fields] = await db.execute(sql, data);
     res.json(rows);
   } catch (error) {
-    console.log(error);
+    let sqlTransaction = `DELETE FROM cbpq where cbpq_id = ${req.atleta.cbpq_id}`;
+    const [rows, fields] = await db.execute(sqlTransaction);
+    console.log(`CBPQ_ID: ${req.atleta.cbpq_id} deletado com sucesso.`, rows);
     next(error);
   }
 };
@@ -43,10 +118,56 @@ const fixDateCBPQ = (date) => {
 
 const cbpqData = async (req, res, next) => {
   try {
-
     const atleta = { historico: [], evolucao: [] }
     let link;
 
+    let sql = `
+      SELECT 
+        p.person_id,
+        p.name,
+        p.email,
+        p.celphone,
+        p.site_cbpq,
+        p.uspa,
+        p.site_uspa,
+        p.height,
+        p.weight,
+        p.type_of_blood,
+        p.numCpf,
+        p.address_id,
+        p.img
+        c.cbpq_id,
+        c.categoria,
+        c.habilitacao,
+        c.filiacao,
+        c.validade,
+        c.dt_emissao_credencial,
+        c.createAt,
+        c.updateAt,
+        c.status,
+        c.numCbpq
+      FROM
+        pessoa as p, 
+        cbpq as c
+      WHERE 
+        p.cbpq_cbpq_id = c.cbpq_id 
+    `;
+
+    // if (!req.query.cbpq) {
+    //   sql += `
+    //   and p.numCpf = ${req.query.cpf};
+    //   `;
+    // } else {
+    //   sql += `
+    //   and c.numCbpq = ${req.query.cbpq};
+    //   `;
+    // }
+    // const [rows, fields] = await db.execute(sql);
+
+    // if (rows.length > 0) {
+    //   req.atleta = rows[0];
+    //   res.json(req.atleta);
+    // } else {
     if (!req.query.cbpq) {
       link = `https://www.cbpq.org.br/site/filiados/consulta-licenca?cbpq=&cpf=${req.query.cpf}`;
     } else {
@@ -143,14 +264,15 @@ const cbpqData = async (req, res, next) => {
           };
 
         });
-        req.atleta = atleta;
-        return next();
-        // res.json(atleta);
 
+        req.atleta = splitEmissao(atleta);
+        // return next();
+        res.json(req.atleta);
       }) // results para o historic e evolucao
-
     }) // 1€ x-ray
+    // }
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -159,7 +281,23 @@ function fazerTrim(string) {
   return string.replace(/^\s+|\s+$/g, "");
 }
 
+const splitEmissao = (atleta) => {
+  if (atleta.emissao) {
+    let arrAtleta = atleta.emissao.split(' ');
+
+    atleta.emissao = arrAtleta[0];
+    console.log(arrAtleta);
+    if (arrAtleta.length > 0) {
+      atleta.rastreamento = arrAtleta[2];
+    }
+    return atleta;
+  } else {
+    return atleta;
+  }
+};
+
 module.exports = {
   cbpqData: cbpqData,
-  updateCbpqData: updateCbpqData
+  updateCbpqData: updateCbpqData,
+  createPersonData: createPersonData
 };

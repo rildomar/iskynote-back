@@ -60,7 +60,7 @@
  *         required: false
  *       - name: cpf
  *         in: query
- *         required: true
+ *         required: false
  *     responses:
  *       200:
  *         description: Operation executed with success
