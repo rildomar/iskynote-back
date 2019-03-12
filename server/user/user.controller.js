@@ -58,7 +58,19 @@ const update = async (req, res, next) => {
 
 const load = async (req, res, next) => {
   try {
-    const query = 'SELECT u.user_id, u.username, p.name,  p.email, p.celphone, u.createdAt, u.role FROM users as u INNER JOIN pessoa as p ON u.Pessoa_idPessoa = p.idPessoa where u.user_id=?';
+    const query = `
+      SELECT 
+        u.user_id, 
+        u.username, 
+        p.name,  
+        p.email, 
+        p.celphone, 
+        u.createdAt, 
+        u.role 
+      FROM 
+        users as u 
+      INNER JOIN pessoa as p ON u.Pessoa_idPessoa = p.idPessoa 
+      WHERE u.user_id=?`;
     const [rows, fields] = await req.connection.execute(query, [req.user.user_id]);
     const user = rows[0];
     if (!user) {

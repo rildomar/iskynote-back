@@ -14,7 +14,8 @@ const secret = {
 };
 
 router.route('/')
-  .post(addressCtrl.create, addressCtrl.created);
+  .get(addressCtrl.getAll);
+  //.post(addressCtrl.create, addressCtrl.created);
 
 
 module.exports = router;
