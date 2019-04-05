@@ -48,8 +48,6 @@
  *       - CBPQ
  *     summary: Pesquise todas as informações de um paraquedista através do seu numero de CBPQ ou CPF.
  *     description: Pesquise todas as informações de um paraquedista através do seu numero de CBPQ ou CPF.
- *     security:
- *      - JWT: [admin]   # Use OAuth with a different scope
  *     produces:
  *       - application/json
  *     consumes:
